@@ -25,10 +25,7 @@ const betterAuthOptions: BetterAuthPluginOptions["betterAuthOptions"] = {
   },
 };
 
-const betterAuthPlugins = [
-  nextCookies(),
-  // admin(), // Add other Better Auth plugins here
-];
+const betterAuthPlugins = [nextCookies()];
 
 // 2. EXPORT THE TYPE of this array for other files to use
 export type BetterAuthPluginsType = typeof betterAuthPlugins;
@@ -43,14 +40,45 @@ export default buildConfig({
       url: process.env.DB_FILE_NAME!,
     },
   }),
+  serverURL: "http://localhost:3000",
   sharp,
   plugins: [
     betterAuthPlugin({
-      requireAdminInviteForSignUp: false,
       betterAuthOptions,
+      disableDefaultPayloadAuth: true,
       users: {
         slug: "users",
+        // --- ADD THIS ---
+        collectionOverrides: ({ collection }) => ({
+          ...collection,
+          timestamps: true, // Tell Payload to manage createdAt/updatedAt
+        }),
+        // --- END ADD ---
+      },
+      // --- ADD THIS FOR ACCOUNTS ---
+      accounts: {
+        collectionOverrides: ({ collection }) => ({
+          ...collection,
+          timestamps: true,
+        }),
+      },
+      // --- ADD THIS FOR SESSIONS ---
+      sessions: {
+        collectionOverrides: ({ collection }) => ({
+          ...collection,
+          timestamps: true,
+        }),
+      },
+      // --- ADD THIS FOR VERIFICATIONS ---
+      verifications: {
+        collectionOverrides: ({ collection }) => ({
+          ...collection,
+          timestamps: true,
+        }),
       },
     }),
   ],
+  typescript: {
+    outputFile: "src/lib/db/types.ts"
+  }
 });
