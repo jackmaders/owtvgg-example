@@ -16,5 +16,13 @@
 			"database_name": "owtvgg-examples",
 			"database_id": "c1d17129-d985-4954-bdc2-8a427a4fd66e"
 		}
-	]
+	],
+	"observability": {
+		"logs": {
+			"enabled": true,
+			"head_sampling_rate": 1,
+			"invocation_logs": true,
+			"persist": true
+		}
+	}
 }
